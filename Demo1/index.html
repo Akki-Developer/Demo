@@ -1,0 +1,145 @@
+<html>
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/108/three.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/mrdoob/Three.js@r92/examples/js/loaders/GLTFLoader.js"></script>
+        <script src="https://unpkg.com/three@0.87.1/examples/js/controls/OrbitControls.js"></script>
+        <style>
+            body {
+                margin: 25px;
+            }
+            html{
+            background: #f5deb3;
+            }
+            #main {
+                position: relative;
+                margin: 50px 0;
+            }
+            #output{
+                left: 0px !important;
+            }
+
+            canvas {
+                position: absolute;
+                top: 0;
+                left: 0px !important;
+            }
+
+            #description {
+                margin-top: 20px;
+                width: 600px;
+            }
+
+            #description-title {
+                font-weight: bold;
+                font-size: 18px;
+            }
+        </style>
+
+    </head>
+    <body>
+        <div id="main">
+            <video id="video" playsinline style="
+            -webkit-transform: scaleX(-1);
+            transform: scaleX(-1);
+            width: auto;
+            height: auto;
+            ">
+            </video>
+            <canvas id="output"></canvas>
+        </div>
+        <script src="index.js"></script>
+        <script>
+            var gltfmodelglobal;
+            function testing123(x, y){
+                console.log(x+" : "+y);
+                gltfmodelglobal.position.set(x-10, 0, 0);
+                scene.add(gltfmodelglobal);
+            }
+
+            //clock for time tracker of object 
+            var clock = new THREE.Clock();
+            var meshmaterial
+            //create scene
+            const scene = new THREE.Scene();
+            // scene.background = new THREE.Color("#f5deb3",0.7);
+            // scene.fog = new THRE.Fog("#f5deb3", 60, 100);
+        8
+        
+            //light
+            var light=new THREE.PointLight(0xffffcc, 20, 200);
+            light.position.set(4,30,-20);
+            // scene.add(light);
+        
+            var light2 = new THREE.AmbientLight( 0x20202A, 20, 100);
+            light2.position.set(30,-10,30);
+            scene.add(light2);
+        
+            //create cemara
+            const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 10000);
+            camera.position.x = 70;
+            camera.position.y = 12;
+            camera.position.z = 20;
+            
+            //create renderer
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.shadowMap.enabled = true;
+            renderer.setClearColor( 0x000000, 0 );
+            renderer.setPixelRatio(window.devicePixelRatio);
+            // videoWidth, videoHeight
+            renderer.setSize( 640, 480 );
+        
+            //resize window
+            window.addEventListener( 'resize', function () {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize( window.innerWidth, window.innerHeight );
+            }, false );
+        
+            document.getElementById("main").appendChild(renderer.domElement);
+            // document.body.
+        
+
+        
+            // Load a gltf gltfmodel
+            var loader = new THREE.GLTFLoader();
+            loader.load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/39255/ladybug.gltf',
+                function outer( gltf ) {
+                    // function testing123(x,y){
+                        // console.log(x+" : "+y)
+                        gltfmodelglobal = gltf.scene;
+                        // gltfmodelglobal = gltfmodel;
+                        gltfmodelglobal.position.set(50, 0, 0);
+            
+                        scene.add(gltfmodelglobal);
+                    // }
+
+
+                },
+
+
+               
+                function ( xhr ) {
+        
+                    console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+        
+                },
+        
+                function ( error ) {
+        
+                    console.log( error,+'An error happened' );
+        
+                }
+            );
+        
+        
+            function animate() {
+        
+            requestAnimationFrame( animate );
+            // controls.update()
+            renderer.render( scene, camera );
+            }
+            animate();
+        
+        </script>
+    </body>
+</html>
